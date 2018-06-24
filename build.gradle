@@ -32,15 +32,18 @@ configurations {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
-//	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compileOnly('org.projectlombok:lombok')
-	
+	compile group: 'io.rest-assured', name: 'spring-mock-mvc', version: '3.0.0'
+	compile 'io.rest-assured:json-path:3.0.0'
+
 	runtime('com.h2database:h2')
 	compileOnly('org.projectlombok:lombok')
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
 	testCompile('org.springframework.security:spring-security-test')
+	//testCompile 'io.rest-assured:rest-assured:3.1.0'
 }
 

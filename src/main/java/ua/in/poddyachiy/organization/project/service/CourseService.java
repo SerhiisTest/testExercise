@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ua.in.poddyachiy.organization.project.api.exception.CourseAlreadyExistsException;
 import ua.in.poddyachiy.organization.project.api.exception.CourseNotFoundException;
 import ua.in.poddyachiy.organization.project.api.exception.OrganizationNotFoundException;
+import ua.in.poddyachiy.organization.project.api.service.ICourseService;
 import ua.in.poddyachiy.organization.project.entity.Course;
 import ua.in.poddyachiy.organization.project.entity.Organization;
 import ua.in.poddyachiy.organization.project.repo.CourseRepository;
@@ -19,10 +20,13 @@ import java.util.Optional;
  * @since
  */
 @Service
-public class CourseService {
+public class CourseService implements ICourseService {
 
     private CourseRepository courseRepository;
     private OrganizationService organizationService;
+
+    public CourseService() {
+    }
 
     @Autowired
     public CourseService(CourseRepository courseRepository, OrganizationService organizationService) {
@@ -30,6 +34,7 @@ public class CourseService {
         this.organizationService = organizationService;
     }
 
+    @Override
     public List<Course> getOrganizationCourses(Integer organizationId) throws OrganizationNotFoundException {
 
 
@@ -40,6 +45,7 @@ public class CourseService {
         return courses;
     }
 
+    @Override
     public Course getCourseByOrganizationAndCourseId(Integer organizationId, Integer courseId) {
         organizationService.getOrganizationById(organizationId);
 
@@ -52,15 +58,17 @@ public class CourseService {
         return oCourse.get();
     }
 
+    @Override
     public Course saveCourse(Course course) {
 
         if (courseRepository.findCourseByTitle(course.getTitle()) != null) {
-            throw new CourseAlreadyExistsException(String.format("Course with title [%s] already exist"));
+            throw new CourseAlreadyExistsException(String.format("Course with title [%s] already exist", course.getTitle()));
         }
 
         return courseRepository.save(course);
     }
 
+    @Override
     public void deleteCourse(Integer organizationId, Integer courseId) throws OrganizationNotFoundException, CourseNotFoundException {
         // jost for existense validation
         getCourseByOrganizationAndCourseId(organizationId, courseId);
@@ -69,6 +77,7 @@ public class CourseService {
 
     }
 
+    @Override
     public Course incrementViewsNumber(Integer organizationId, Integer courseId) throws OrganizationNotFoundException, CourseNotFoundException {
         // jost for existense validation
         getCourseByOrganizationAndCourseId(organizationId, courseId);

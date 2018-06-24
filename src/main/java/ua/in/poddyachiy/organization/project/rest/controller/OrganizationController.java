@@ -1,7 +1,7 @@
 package ua.in.poddyachiy.organization.project.rest.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,24 +11,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.in.poddyachiy.organization.project.api.service.ICourseService;
+import ua.in.poddyachiy.organization.project.api.service.IExamService;
 import ua.in.poddyachiy.organization.project.entity.Course;
 import ua.in.poddyachiy.organization.project.entity.Exam;
-import ua.in.poddyachiy.organization.project.service.CourseService;
-import ua.in.poddyachiy.organization.project.service.ExamService;
 
 import java.util.List;
 
 
-@Slf4j
 @RestController
 @RequestMapping(path = "/organization")
 public class OrganizationController {
 
-    private CourseService courseService;
-    private ExamService examService;
+    private ICourseService courseService;
+    private IExamService examService;
 
     @Autowired
-    public OrganizationController(CourseService courseService, ExamService examService) {
+    public OrganizationController(ICourseService courseService, IExamService examService) {
         this.courseService = courseService;
         this.examService = examService;
     }
@@ -50,10 +49,13 @@ public class OrganizationController {
 
 
     @PostMapping("/{orgid}/courses/{courseId}")
-    public Course postCourse(@PathVariable("orgid") Integer organizationId,
-                             @PathVariable("courseId") Integer courseId,
-                             @RequestBody Course course) {
-        return courseService.saveCourse(course);
+    public ResponseEntity<Course> postCourse(@PathVariable("orgid") Integer organizationId,
+                                             @PathVariable("courseId") Integer courseId,
+                                             @RequestBody Course course) {
+        Course persistedCourse = courseService.saveCourse(course);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(persistedCourse);
+
     }
 
 

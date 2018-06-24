@@ -3,11 +3,11 @@ package ua.in.poddyachiy.organization.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.in.poddyachiy.organization.project.api.exception.ExamNotFoundException;
+import ua.in.poddyachiy.organization.project.api.service.ICourseService;
+import ua.in.poddyachiy.organization.project.api.service.IExamService;
 import ua.in.poddyachiy.organization.project.entity.Course;
 import ua.in.poddyachiy.organization.project.entity.Exam;
-import ua.in.poddyachiy.organization.project.repo.CourseRepository;
 import ua.in.poddyachiy.organization.project.repo.ExamRepository;
-import ua.in.poddyachiy.organization.project.repo.OrganizationRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,21 +17,19 @@ import java.util.Optional;
  * @since
  */
 @Service
-public class ExamService {
+public class ExamService implements IExamService {
 
-    private OrganizationRepository organizationRepository;
-    private CourseService courseService;
-    private CourseRepository courseRepository;
+    private ICourseService courseService;
     private ExamRepository examRepository;
 
+
     @Autowired
-    public ExamService(OrganizationRepository organizationRepository, CourseService courseService, CourseRepository courseRepository, ExamRepository examRepository) {
-        this.organizationRepository = organizationRepository;
+    public ExamService(ICourseService courseService, ExamRepository examRepository) {
         this.courseService = courseService;
-        this.courseRepository = courseRepository;
         this.examRepository = examRepository;
     }
 
+    @Override
     public Exam getExamByOrganizationCourseAndExamId(Integer organizationId, Integer courseId, Integer examId) {
         // just for existence validation
         courseService.getCourseByOrganizationAndCourseId(organizationId, courseId);
@@ -45,6 +43,7 @@ public class ExamService {
         return oExam.get();
     }
 
+    @Override
     public List<Exam> getExamsForCourse(Integer organizationId, Integer courseId) {
 
         Course course = courseService.getCourseByOrganizationAndCourseId(organizationId, courseId);
@@ -52,6 +51,7 @@ public class ExamService {
         return course.getExams();
     }
 
+    @Override
     public void deleteExam(Integer organizationId, Integer courseId, Integer examId) {
 
         Exam examToDelete = getExamByOrganizationCourseAndExamId(organizationId, courseId, examId);
