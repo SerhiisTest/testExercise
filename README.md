@@ -33,7 +33,9 @@ RestAssuredMVC - is used for unit testing of points below:
 * check that data was not modified
 
 ##Application execution
-Just run OrganizationProjectApplication class which gonna run embedded Tomcat server  
+Currently application is packaged as .war according to task description
+But commenting *apply plugin: 'war'* line in *build.gradle* file allows to run the application using embedded tomcat
+  
 
 
 
