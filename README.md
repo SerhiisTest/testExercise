@@ -18,7 +18,7 @@
 On application start tables are created in H2 in-memory database from *shema.sql* and data loaded to the tables from *data.sql*
 So, we can fetch organizations from out the box
 
-##Security 
+## Security 
 Current application uses Basic authentification for securing REST endpoint.
 Available user roles are below:
 
@@ -26,13 +26,13 @@ Available user roles are below:
 * MODIFICATION - allows access POST, PATCH endpoints as well
 * ADMIN - allows access DELETE endpoints as well
 
-##Unit testing
+## Unit testing
 RestAssuredMVC - is used for unit testing of points below:
 * check that only granted users have access to REST - endpoints
 * verify that exception mapping works correctly
 * check that data was not modified
 
-##Application execution
+## Application execution
 Currently application is packaged as .war according to task description
 But commenting *apply plugin: 'war'* line in *build.gradle* file allows to run the application using embedded tomcat
   
